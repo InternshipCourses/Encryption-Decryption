@@ -2,3 +2,9 @@
 .idea
 *.jar
 *yaml
+Topics
+build.gradle
+gradle
+gradlew
+gradlew.bat
+settings.gradle
