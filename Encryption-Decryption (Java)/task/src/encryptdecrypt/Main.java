@@ -133,22 +133,24 @@ public class Main {
     }
 
     private static StringBuilder cypherOperation(Map<String, String> operator, String inputData) {
+
         StringBuilder result = new StringBuilder();
 
         int inputKey = Integer.parseInt(operator.get("-key")) ;
 
-        switch (operator.getOrDefault("-alg", "shift")) {
+        switch (operator.get("-alg")) {
 
             case "shift" -> {
 
-                switch (operator.getOrDefault("-mode", "enc")) {
+                switch (operator.get("-mode")) {
 
                     case "enc" -> result = new StringBuilder(encryptionShift(inputData, inputKey));
                     case "dec" -> result = new StringBuilder(decryptionShift(inputData, inputKey));
 
                 }
             }
-            case "unicode" -> result = switch (operator.getOrDefault("-mode", "enc")) {
+
+            case "unicode" -> result = switch (operator.get("-mode")) {
 
                 case "enc" -> new StringBuilder(encryption(inputData, inputKey));
                 case "dec" -> new StringBuilder(decryption(inputData, inputKey));
@@ -159,7 +161,7 @@ public class Main {
         return result;
     }
 
-    private static Map<String, String> assignKeyToValue(String[] args, Map<String, String> operator) {
+    private static void assignKeyToValue(String[] args, Map<String, String> operator) {
 
         for (int i = 0; i < args.length;) {
 
@@ -188,9 +190,6 @@ public class Main {
             operator.putIfAbsent(defaultMap.getKey(), defaultMap.getValue());
         }
 
-
-
-        return operator;
     }
 
     public static void main(String[] args) {
@@ -217,7 +216,7 @@ public class Main {
 
             } catch (Exception e) {
 
-                System.out.println("Please prove a valid input :" + e.getMessage());
+                System.out.println("Please prove a valid input :");
 
                 return;
 
