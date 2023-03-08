@@ -1,72 +1,91 @@
 package encryptdecrypt;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Collections.unmodifiableMap;
 
 public class Main {
 
+    private final static Map<String, String> DEFAULT;
+
+    static {
+
+        final var map = new HashMap<String, String>();
+        map.put("-key", "0");
+        map.put("-mode","enc");
+        map.put("-alg","shift");
+        map.put("-data","");
+        map.put("-in","");
+        map.put("-out","");
+        DEFAULT = unmodifiableMap(map);
+
+    }
 
     public static String encryption(String input, int key){
-        String result = "";
+        StringBuilder result = new StringBuilder() ;
 
         char[] characterArray = input.toCharArray();
 
         char firstCharacter = ' '; // using 'empty space' the first (32)
-
         char lastCharacter = '~' ; // using '~' has the last (126)
 
         for (char current: characterArray) {
 
             if ((current + key ) > lastCharacter){
+
                 int tempKey = key - (lastCharacter - current);
                 current = (char) (tempKey + firstCharacter);
+
             }else{
+
                 current = (char) (current + key);
+
             }
 
-            result = result + current ;
+            result.append(current) ;
         }
 
-        return result;
+        return result.toString();
     }
+
     public static String decryption(String input, int key){
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         char[] characterArray = input.toCharArray();
 
         char firstCharacter = ' '; // using 'empty space' the first (32)
-
         char lastCharacter = '~' ; // using '~' has the last (126)
 
-        for (char currentCharater : characterArray){
+        for (char currentCharacter : characterArray){
 
-            if ((currentCharater - key ) < firstCharacter){
+            if ((currentCharacter - key ) < firstCharacter){
 
-                int tempKey = key - (currentCharater - firstCharacter) ;
-                currentCharater = (char) ( lastCharacter - tempKey );
+                int tempKey = key - (currentCharacter - firstCharacter) ;
+                currentCharacter = (char) ( lastCharacter - tempKey );
 
             }else{
-                currentCharater = (char) (currentCharater - key);
+
+                currentCharacter = (char) (currentCharacter - key);
+
             }
 
-            result = result + currentCharater;
+            result.append(currentCharacter);
         }
 
-        return result;
+        return result.toString();
     }
 
     public static String encryptionShift(String input, int key){
-        String result ="";
+        StringBuilder result = new StringBuilder();
+
         char[] inputArray = input.toCharArray();
 
         for (char currentCharacter : inputArray) {
 
-            if(Character.isUpperCase(currentCharacter) || Character.isLowerCase(currentCharacter) ){ // checking if its a valid letter
+            if(Character.isAlphabetic(currentCharacter) ){ // checking if its a valid letter
 
                 char startLetter  =  (Character.isUpperCase(currentCharacter)) ? 'A':'a';
                 char endLetter  =  (Character.isUpperCase(currentCharacter)) ? 'Z':'z';
@@ -80,103 +99,149 @@ public class Main {
                 }
             }
 
-            result = result + currentCharacter;
+            result.append(currentCharacter);
         }
-        return  result;
+        return  result.toString();
     }
 
     public static String decryptionShift(String input, int key){
-        String result ="";
+        StringBuilder result = new StringBuilder() ;
         char[] inputArray = input.toCharArray();
 
         for (char currentCharacter : inputArray) {
 
-            if(Character.isUpperCase(currentCharacter) || Character.isLowerCase(currentCharacter) ){ // checking if its a valid letter
+            if(Character.isAlphabetic(currentCharacter)){ // checking if its a valid letter
 
                 char startLetter  =  (Character.isUpperCase(currentCharacter)) ? 'A':'a';
                 char endLetter  =  (Character.isUpperCase(currentCharacter)) ? 'Z':'z';
 
                 if((currentCharacter - key) < startLetter){
-                    // (key + (startLetter - currentCharacter) - 1)  == new key to use at the end of the alphabet
-                    int tempKey = (key + (startLetter - currentCharacter) -1) ;// key - (endLetter - currentCharacter) - 1;
+
+                    int tempKey = (key + (startLetter - currentCharacter) -1) ;
                     currentCharacter = (char) (endLetter - tempKey );
+
                 }else{
+
                     currentCharacter = (char) (currentCharacter - key);
+
                 }
             }
 
-            result = result + currentCharacter;
+            result.append(currentCharacter);
         }
-        return  result;
+        return  result.toString();
     }
 
+    private static StringBuilder cypherOperation(Map<String, String> operator, String inputData) {
+        StringBuilder result = new StringBuilder();
 
+        int inputKey = Integer.parseInt(operator.get("-key")) ;
+
+        switch (operator.getOrDefault("-alg", "shift")) {
+
+            case "shift" -> {
+
+                switch (operator.getOrDefault("-mode", "enc")) {
+
+                    case "enc" -> result = new StringBuilder(encryptionShift(inputData, inputKey));
+                    case "dec" -> result = new StringBuilder(decryptionShift(inputData, inputKey));
+
+                }
+            }
+            case "unicode" -> result = switch (operator.getOrDefault("-mode", "enc")) {
+
+                case "enc" -> new StringBuilder(encryption(inputData, inputKey));
+                case "dec" -> new StringBuilder(decryption(inputData, inputKey));
+                default -> result;
+
+            };
+        }
+        return result;
+    }
+
+    private static Map<String, String> assignKeyToValue(String[] args, Map<String, String> operator) {
+
+        for (int i = 0; i < args.length;) {
+
+            if (DEFAULT.containsKey(args[i])) {
+                try {
+
+                    if (args[i + 1].charAt(0) != '-') {
+                        operator.put(args[i], args[i + 1]);
+                        i += 2;
+                    } else {
+                        operator.put(args[i], DEFAULT.get(args[i]));
+                        i++;
+                    }
+
+                } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException){
+                    operator.put(args[i], DEFAULT.get(args[i]));
+                    break;
+                }
+            }else {
+                i++;
+            }
+        }
+
+
+        for (Map.Entry<String, String> defaultMap: DEFAULT.entrySet()){
+            operator.putIfAbsent(defaultMap.getKey(), defaultMap.getValue());
+        }
+
+
+
+        return operator;
+    }
 
     public static void main(String[] args) {
 
-        Map<String,String> operator = new HashMap<>();
+        Map<String, String> operator = new HashMap<>();
 
-        for (int i = 0; i < args.length; i = i+2) {
+        assignKeyToValue(args, operator);
 
-            operator.put(args[i],args[i+1]);
-        }
+        String inputData = operator.get("-data");
 
-        File xFile = new File(operator.get("-in"));
+        if (operator.get("-data").equals("")) {
 
-        try(Scanner scannerFile = new Scanner(xFile)) {
+            try {
 
-            while (scannerFile.hasNext()){
-                operator.put("-in",scannerFile.nextLine());
+                File xFile = new File(operator. get("-in"));
+
+                Scanner scannerFile = new Scanner(xFile);
+
+                while (scannerFile.hasNext()){
+
+                    inputData = scannerFile.nextLine();
+
+                }
+
+            } catch (Exception e) {
+
+                System.out.println("Please prove a valid input :" + e.getMessage());
+
+                return;
+
             }
-        } catch (FileNotFoundException e) {
-            operator.put("-in","");
         }
 
-        String result ="";
-        String inputData = operator.getOrDefault("-data", operator.getOrDefault("-in",""));
-        int inputKey = Integer.parseInt(operator.getOrDefault("-key","0")) ;
 
-        switch(operator.getOrDefault("-alg","shift")){
-
-            case "shift":
-
-                switch (operator.getOrDefault("-mode","enc")) {
-
-                    case "enc":
-                        result = encryptionShift(inputData ,inputKey);
-                        break;
-                    case "dec":
-                        result = decryptionShift(inputData,inputKey);
-                        break;
-                }
-
-                break;
-
-            case "unicode":
-
-                switch (operator.getOrDefault("-mode","enc")) {
-                    case "enc":
-                        result = encryption(inputData ,inputKey);
-                        break;
-                    case "dec":
-                        result = decryption(inputData,inputKey);
-                        break;
-                }
-                break;
-        }
+        StringBuilder result = cypherOperation(operator, inputData);
 
         try {
+
             FileWriter fileWriter = new FileWriter(operator.get("-out"));
-            fileWriter.write(result);
+            fileWriter.write(result.toString());
             fileWriter.close();
 
-        } catch (IOException e) {
+            System.out.println("Save completed");
+
+        } catch (Exception e) {
+
             System.out.println(result);
+
         }
 
-        /*System.out.println(result);*/
-
-
     }
+
 
 }

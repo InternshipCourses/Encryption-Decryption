@@ -22,7 +22,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-mode", "enc",
                     "-key", "5",
                     "-in", "in.txt",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("\\jqhtrj%yt%m~ujwxpnqq&")
                 .addFile("in.txt", "Welcome to hyperskill!"),
@@ -33,7 +33,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-mode", "enc",
                     "-alg", "unicode",
                     "-in", "input.txt",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("Hello")
                 .addFile("input.txt", "Hello"),
@@ -43,7 +43,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "1",
                     "-in", "i.txt",
                     "-alg", "unicode",
-                    "-out", "output.txt",
+                    "-out", "road_to_treasure.txt",
                     "-mode", "enc"
                 )
                 .setAttach("123456789")
@@ -53,7 +53,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                 .addArguments(
                     "-mode", "dec",
                     "-in", "input.txt",
-                    "-out", "output.txt",
+                    "-out", "road_to_treasure.txt",
                     "-alg", "unicode",
                     "-key", "5"
                 )
@@ -66,7 +66,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-alg", "unicode",
                     "-key", "0",
                     "-in", "input.txt",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("Hi")
                 .addFile("input.txt", "Hi"),
@@ -77,7 +77,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "1",
                     "-in", "input.txt",
                     "-alg", "unicode",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("111122223333")
                 .addFile("input.txt", "222233334444"),
@@ -88,7 +88,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "5",
                     "-in", "input.txt",
                     "-alg", "shift",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("bjqhtrj yt mdujwxpnqq")
                 .addFile("input.txt", "welcome to hyperskill"),
@@ -99,7 +99,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "10",
                     "-in", "input.txt",
                     "-alg", "shift",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("treasure")
                 .addFile("input.txt", "dbokcebo"),
@@ -110,7 +110,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "12",
                     "-in", "input.txt",
                     "-alg", "shift",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("cphpchdjcijdjibhdjebhjucspucmdmudbnuccup")
                 .addFile("input.txt", "qdvdqvrxqwxrxwpvrxspvxiqgdiqarairpbiqqid"),
@@ -121,7 +121,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "10",
                     "-in", "input.txt",
                     "-alg", "shift",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("y")
                 .addFile("input.txt", "i"),
@@ -132,7 +132,7 @@ public class EncryptDecryptTest extends StageTest<String> {
                     "-key", "10",
                     "-in", "input.txt",
                     "-alg", "shift",
-                    "-out", "output.txt"
+                    "-out", "road_to_treasure.txt"
                 )
                 .setAttach("i")
                 .addFile("input.txt", "y")
@@ -141,14 +141,14 @@ public class EncryptDecryptTest extends StageTest<String> {
 
     @Override
     public CheckResult check(String reply, String clue) {
-        String fileName = "output.txt";
+        String fileName = "road_to_treasure.txt";
         String output;
 
         try {
             Path path = Paths.get(FileUtils.CURRENT_DIR + fileName);
             output = Files.readString(path, StandardCharsets.UTF_8);
         } catch (NoSuchFileException e) {
-            return new CheckResult(false, "File output.txt not found!");
+            return new CheckResult(false, "File road_to_treasure.txt not found!");
         } catch (IOException e) {
             return new CheckResult(false, "Cannot read from file!");
         }
