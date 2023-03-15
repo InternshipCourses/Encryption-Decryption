@@ -77,7 +77,7 @@ public class Main {
                     // new Key to use at the beginning of the alphabet
                     int tempKey = key - (endLetter - currentCharacter) - 1;
                     currentCharacter = (char) (tempKey + startLetter);
-                }else {
+                } else {
                     currentCharacter = (char) (currentCharacter + key);
                 }
             }
