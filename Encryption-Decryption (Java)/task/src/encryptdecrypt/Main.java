@@ -30,16 +30,16 @@ public class Main {
         DEFAULT = unmodifiableMap(map);
     }
 
-    public static String encryption(String input, int key){
+    public static String encryption(String input, int key) {
         StringBuilder result = new StringBuilder() ;
 
         final char[] characterArray = input.toCharArray();
 
         for (char currentCharacter: characterArray) {
-            if ((currentCharacter + key ) > LAST_CHARACTER){ //Checking if the letter to shift to is more than the last character
+            if ((currentCharacter + key ) > LAST_CHARACTER) { //Checking if the letter to shift to is more than the last character
                 int tempKey = key - (LAST_CHARACTER - currentCharacter);//new key to use at with the first character to get the new letter
                 currentCharacter = (char) (tempKey + FIRST_CHARACTER);
-            } else{
+            } else {
                 currentCharacter = (char) (currentCharacter + key);
             }
             result.append(currentCharacter) ;
@@ -64,7 +64,7 @@ public class Main {
         return result.toString();
     }
 
-    public static String encryptionShift(String input, int key){
+    public static String encryptionShift(String input, int key) {
         StringBuilder result = new StringBuilder();
 
         final char[] inputArray = input.toCharArray();
@@ -73,11 +73,11 @@ public class Main {
             if (Character.isAlphabetic(currentCharacter)) { // checking if its a valid letter
                 final char startLetter  =  (Character.isUpperCase(currentCharacter)) ? 'A':'a';
                 final char endLetter  =  (Character.isUpperCase(currentCharacter)) ? 'Z':'z';
-                if((currentCharacter + key) > endLetter){
+                if((currentCharacter + key) > endLetter) {
                     // new Key to use at the beginning of the alphabet
                     int tempKey = key - (endLetter - currentCharacter) - 1;
                     currentCharacter = (char) (tempKey + startLetter);
-                }else{
+                }else {
                     currentCharacter = (char) (currentCharacter + key);
                 }
             }
@@ -153,7 +153,6 @@ public class Main {
                 i++;
             }
         }
-
         for (Map.Entry<String, String> defaultMap: DEFAULT.entrySet()) {
             operator.putIfAbsent(defaultMap.getKey(), defaultMap.getValue());
         }
@@ -168,16 +167,14 @@ public class Main {
         String inputData = operator.get(DATA_KEY);
 
         if (operator.get(DATA_KEY).equals("")) {
-
             File xFile = new File(operator.get("-in"));
             try (Scanner scannerFile = new Scanner(xFile)) {
-
                 while (scannerFile.hasNext()) {
                     inputData = scannerFile.nextLine();
                 }
-
                 if (inputData.equals("")) {
-                    throw new NullPointerException();
+                    logger.info("Please prove a valid input!!!");
+                    return;
                 }
             } catch (Exception e) {
                 logger.info("Please prove a valid input!!!");
@@ -185,7 +182,7 @@ public class Main {
         }
 
         StringBuilder result = cypherOperation(operator, inputData);
-        try(FileWriter fileWriter = new FileWriter(operator.get("-out"))) {
+        try (FileWriter fileWriter = new FileWriter(operator.get("-out"))) {
             fileWriter.write(result.toString());
         } catch (Exception e) {
             logger.info(String.valueOf(result));
