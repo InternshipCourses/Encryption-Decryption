@@ -6,8 +6,15 @@ import encryptdecrypt.Cypher;
 public class UnicodeCypher implements Cypher {
     private static final char FIRST_CHARACTER = ' '; // using 'empty space' the first (32)
     private static final char LAST_CHARACTER = '~' ; // using '~' has the last (126)
+
+    private final int key;
+
+    public UnicodeCypher(int key) {
+        this.key = key;
+    }
+
     @Override
-    public String encrypt(String rawData, int key) {
+    public String encrypt(String rawData) {
         StringBuilder result = new StringBuilder() ;
         final char[] characterArray = rawData.toCharArray();
         for (char currentCharacter: characterArray) {
@@ -23,7 +30,7 @@ public class UnicodeCypher implements Cypher {
     }
 
     @Override
-    public String decrypt(String rawData, int key) {
+    public String decrypt(String rawData) {
         StringBuilder result = new StringBuilder();
 
         final char[] characterArray = rawData.toCharArray();

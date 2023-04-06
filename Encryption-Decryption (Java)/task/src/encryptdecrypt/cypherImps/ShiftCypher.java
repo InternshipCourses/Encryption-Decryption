@@ -4,8 +4,14 @@ import encryptdecrypt.Cypher;
 
 public class ShiftCypher implements Cypher {
 
+    private final int key;
+
+    public ShiftCypher(int key) {
+        this.key = key;
+    }
+
     @Override
-    public String encrypt(String rawData, int key) {
+    public String encrypt(String rawData) {
         StringBuilder result = new StringBuilder();
         final char[] inputArray = rawData.toCharArray();
         for (char currentCharacter : inputArray) {
@@ -25,7 +31,7 @@ public class ShiftCypher implements Cypher {
         return result.toString();    }
 
     @Override
-    public String decrypt(String rawData, int key) {
+    public String decrypt(String rawData) {
         StringBuilder result = new StringBuilder() ;
         final char[] inputArray = rawData.toCharArray();
         for (char currentCharacter : inputArray) {
