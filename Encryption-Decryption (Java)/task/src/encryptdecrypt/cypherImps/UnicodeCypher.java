@@ -9,8 +9,8 @@ public class UnicodeCypher implements Cypher {
 
     private final int key;
 
-    public UnicodeCypher(int cypherKey) {
-        this.key = cypherKey;
+    public UnicodeCypher(int key) {
+        this.key = key;
     }
 
     @Override

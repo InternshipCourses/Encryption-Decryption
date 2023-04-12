@@ -1,4 +1,4 @@
-package encryptdecrypt.input_output_data;
+package encryptdecrypt.NewPattern;
 
 public interface Output {
 

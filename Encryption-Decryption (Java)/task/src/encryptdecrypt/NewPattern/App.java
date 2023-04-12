@@ -1,18 +1,33 @@
 package encryptdecrypt.NewPattern;
 
-import encryptdecrypt.configuration.Config;
+import encryptdecrypt.Cypher;
+import encryptdecrypt.CypherFactory;
+import encryptdecrypt.cypherImps.UnicodeCypher;
 
 public class App implements Runnable {
 
-    private final Config config;
+// private final Input in;
+// private final Output out;
+// private final Config config;
+
+    private Input fromWhereWeAreGettingDate;
+    private Output placeToPassEncryptedData;
+    public App(Input fromWhereWeAreGettingDate, Output placeToPassEncryptedData) {
+        this.placeToPassEncryptedData = placeToPassEncryptedData;
+        this.fromWhereWeAreGettingDate = fromWhereWeAreGettingDate;
+    }
+
     public App(Config config) {
-        this.config = config;
+        fromWhereWeAreGettingDate = config.getInput();
+        placeToPassEncryptedData = config.getOutput();
     }
 
     @Override
     public void run() {
-        String inputData = config.getInput().read();
-        config.getOutput().write(inputData);
+        placeToPassEncryptedData.write(fromWhereWeAreGettingDate.read());
+//        Cypher currentCypher = CypherFactory.getCypher(config.getAlgorithm(), config.getKey());
+//        IO doSomething = CypherFactory.getEncryptOrDecryptDataToFile(config.getMode(), new FileIO(config.getInput()),currentCypher);
+//        doSomething.write(config.getData());
     }
 
 }

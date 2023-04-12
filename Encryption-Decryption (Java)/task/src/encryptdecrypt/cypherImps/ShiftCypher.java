@@ -6,8 +6,8 @@ public class ShiftCypher implements Cypher {
 
     private final int key;
 
-    public ShiftCypher(int cypherKey) {
-        this.key = cypherKey;
+    public ShiftCypher(int key) {
+        this.key = key;
     }
 
     @Override
