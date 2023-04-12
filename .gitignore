@@ -11,3 +11,5 @@ settings.gradle
 build
 out
 *.class
+*.txt
+*.html

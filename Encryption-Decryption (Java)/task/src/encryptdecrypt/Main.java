@@ -1,8 +1,10 @@
 package encryptdecrypt;
 
-import static encryptdecrypt.DefaultConfigSettings.*;
+import encryptdecrypt.NewPattern.App;
+import encryptdecrypt.configuration.AbstractConfig;
+
 public class Main {
     public static void main(String[] args) {
-        new EncryptDecryptApp(assignKeyToValue(args)).start();
+        new App(new AbstractConfig(args)).run();
     }
 }

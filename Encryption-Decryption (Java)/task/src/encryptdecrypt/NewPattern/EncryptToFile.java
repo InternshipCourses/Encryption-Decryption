@@ -1,6 +1,7 @@
 package encryptdecrypt.NewPattern;
 
 import encryptdecrypt.Cypher;
+import encryptdecrypt.input_output_data.IO;
 
 public class EncryptToFile implements IO {
 
