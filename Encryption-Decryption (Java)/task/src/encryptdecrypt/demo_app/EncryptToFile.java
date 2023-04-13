@@ -1,6 +1,7 @@
-package encryptdecrypt.NewPattern;
+package encryptdecrypt.demo_app;
 
-import encryptdecrypt.Cypher;
+import encryptdecrypt.cypher.Cypher;
+import encryptdecrypt.input_output.impl.IO;
 
 public class EncryptToFile implements IO {
 
@@ -14,7 +15,7 @@ public class EncryptToFile implements IO {
 
     @Override
     public String read() {
-        return fileIO.read();
+        return cypher.decrypt(fileIO.read());
     }
 
     @Override

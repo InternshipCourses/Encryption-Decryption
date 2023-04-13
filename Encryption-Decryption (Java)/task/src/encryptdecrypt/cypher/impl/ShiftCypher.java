@@ -1,6 +1,6 @@
-package encryptdecrypt.cypherImps;
+package encryptdecrypt.cypher.impl;
 
-import encryptdecrypt.Cypher;
+import encryptdecrypt.cypher.Cypher;
 
 public class ShiftCypher implements Cypher {
 

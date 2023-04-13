@@ -1,4 +1,4 @@
-package encryptdecrypt;
+package encryptdecrypt.cypher;
 
 public interface Cypher {
 

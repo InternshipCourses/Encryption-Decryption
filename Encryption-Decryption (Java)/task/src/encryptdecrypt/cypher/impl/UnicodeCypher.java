@@ -1,7 +1,7 @@
-package encryptdecrypt.cypherImps;
+package encryptdecrypt.cypher.impl;
 
-import encryptdecrypt.Cypher;
 
+import encryptdecrypt.cypher.Cypher;
 
 public class UnicodeCypher implements Cypher {
     private static final char FIRST_CHARACTER = ' '; // using 'empty space' the first (32)
