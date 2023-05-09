@@ -8,14 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static encryptdecrypt.cypher.CypherFactory.encryptOrDecryptData;
-import static encryptdecrypt.cypher.CypherFactory.getCypher;
+import static encryptdecrypt.cypher.CypherProcessing.encryptOrDecryptData;
+import static encryptdecrypt.cypher.CypherProcessing.getCypher;
 import static java.util.Collections.unmodifiableMap;
 
-public class AbstractConfig implements Config{
+public class ConfigImpl implements Config{
 
-    private static Logger logger = Logger.getLogger(AbstractConfig.class.getName());
-
+    private static final Logger logger = Logger.getLogger(ConfigImpl.class.getName());
     private static final Map<String, String> DEFAULT;
     private static final String MODE_KEY = "-mode";
     private static final String DATA_KEY = "-data";
@@ -23,7 +22,6 @@ public class AbstractConfig implements Config{
     private static final String ALGORITHM_KEY = "-alg";
     private static final String INPUT_FILE_KEY = "-in";
     private static final String OUTPUT_FILE_KEY = "-out";
-
     static {
         final var map = new HashMap<String, String>();
         map.put(CYPHER_KEY, "0");
@@ -37,12 +35,14 @@ public class AbstractConfig implements Config{
 
     private final Map<String, String> operatorKeyAndValue;
 
-    public AbstractConfig(String[] args) {
+    public ConfigImpl(String[] args) {
        this.operatorKeyAndValue = assignKeyToValue(args);
     }
 
-    public static Map<String, String> assignKeyToValue(String[] args) {
+    public Map<String, String> assignKeyToValue(String[] args) {
+
         Map<String, String> newOperatorKeyAndValue = new HashMap<>();
+
         int i = 0;
         while (i < args.length) {
             if (DEFAULT.containsKey(args[i])) {
@@ -61,13 +61,15 @@ public class AbstractConfig implements Config{
         for (Map.Entry<String, String> defaultMap: DEFAULT.entrySet()) {
             newOperatorKeyAndValue.putIfAbsent(defaultMap.getKey(), defaultMap.getValue());
         }
+
         return newOperatorKeyAndValue;
     }
 
     public String dataToCypher(String inputData){
-        if (inputData.equals("")) {
+
+        if ("".equals(inputData)) {
             inputData = new  FileIO(operatorKeyAndValue.get(INPUT_FILE_KEY)).read();
-            if (inputData.equals("")){
+            if ("".equals(inputData)){
                 logger.info("No data pass so there is nothing to Operate on");
             }
         }
@@ -76,21 +78,18 @@ public class AbstractConfig implements Config{
 
     @Override
     public Input getInput() {
+
         return ()-> encryptOrDecryptData(operatorKeyAndValue.get(MODE_KEY),
                         dataToCypher(operatorKeyAndValue.get(DATA_KEY)),
                         getCypher(operatorKeyAndValue.get(ALGORITHM_KEY),
-                                Integer.parseInt(operatorKeyAndValue.get(CYPHER_KEY))
-                        )
-        );
-
+                                Integer.parseInt(operatorKeyAndValue.get(CYPHER_KEY))));
     }
 
     @Override
     public Output getOutput() {
-        if (operatorKeyAndValue.get(OUTPUT_FILE_KEY).equals("")) {
-            return  input -> logger.info(input);
-        }else {
-            return input -> new FileIO(operatorKeyAndValue.get(OUTPUT_FILE_KEY)).write(input);
-        }
+
+        return (operatorKeyAndValue.get(OUTPUT_FILE_KEY).equals("")) ?
+                input -> logger.info(input) :
+                input -> new FileIO(operatorKeyAndValue.get(OUTPUT_FILE_KEY)).write(input);
     }
 }

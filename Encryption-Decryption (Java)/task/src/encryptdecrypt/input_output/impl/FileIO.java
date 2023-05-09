@@ -3,32 +3,32 @@ package encryptdecrypt.input_output.impl;
 import encryptdecrypt.exception.AppFileException;
 import encryptdecrypt.input_output.impl.IO;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class FileIO implements IO {
     private final String fileLocation;
-    Logger logger = Logger.getLogger(FileIO.class.getName());
+    private final Logger logger = Logger.getLogger(FileIO.class.getName());
     public FileIO(String fileLocation) {
         this.fileLocation = fileLocation;
     }
 
     @Override
     public String read() {
-        StringBuilder fileInputData;
-        try (Scanner scannerFile = new Scanner(new File(this.fileLocation)) ){
-            fileInputData = new StringBuilder();
-            while ( scannerFile.hasNext()) {
-                fileInputData.append(scannerFile.nextLine());
-            }
+        StringBuilder fileInputData = new StringBuilder();
 
+        String input;
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.fileLocation))){
+            while ((input = reader.readLine()) != null){
+                fileInputData.append(input);
+            }
         } catch (FileNotFoundException e) {
             throw new AppFileException("File was not found",e);
+        } catch (IOException e) {
+            throw new AppFileException("IO Error has occurred ",e);
         }
+
         return String.valueOf(fileInputData);
     }
 
