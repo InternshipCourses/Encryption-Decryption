@@ -39,8 +39,7 @@ public class ConfigImpl implements Config{
        this.operatorKeyAndValue = assignKeyToValue(args);
     }
 
-    public Map<String, String> assignKeyToValue(String[] args) {
-
+    private Map<String, String> assignKeyToValue(String[] args) {
         Map<String, String> newOperatorKeyAndValue = new HashMap<>();
 
         int i = 0;
@@ -61,12 +60,10 @@ public class ConfigImpl implements Config{
         for (Map.Entry<String, String> defaultMap: DEFAULT.entrySet()) {
             newOperatorKeyAndValue.putIfAbsent(defaultMap.getKey(), defaultMap.getValue());
         }
-
         return newOperatorKeyAndValue;
     }
 
-    public String dataToCypher(String inputData){
-
+    private String dataToCypher(String inputData){
         if ("".equals(inputData)) {
             inputData = new  FileIO(operatorKeyAndValue.get(INPUT_FILE_KEY)).read();
             if ("".equals(inputData)){
@@ -78,7 +75,6 @@ public class ConfigImpl implements Config{
 
     @Override
     public Input getInput() {
-
         return ()-> encryptOrDecryptData(operatorKeyAndValue.get(MODE_KEY),
                         dataToCypher(operatorKeyAndValue.get(DATA_KEY)),
                         getCypher(operatorKeyAndValue.get(ALGORITHM_KEY),
@@ -87,7 +83,6 @@ public class ConfigImpl implements Config{
 
     @Override
     public Output getOutput() {
-
         return (operatorKeyAndValue.get(OUTPUT_FILE_KEY).equals("")) ?
                 input -> logger.info(input) :
                 input -> new FileIO(operatorKeyAndValue.get(OUTPUT_FILE_KEY)).write(input);

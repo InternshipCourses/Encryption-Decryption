@@ -8,8 +8,10 @@ public class CypherProcessing {
 
     private CypherProcessing() {
     }
+
     /*
-    * Returning the requested cypher to use*/
+    * Returning the requested cypher to use
+    * */
     public static Cypher getCypher(String cypherType, int key){
         return switch (cypherType){
             case "chuck" -> new ChuckNorrisCypher();

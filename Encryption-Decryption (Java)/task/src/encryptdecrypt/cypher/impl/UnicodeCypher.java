@@ -4,8 +4,8 @@ package encryptdecrypt.cypher.impl;
 import encryptdecrypt.cypher.Cypher;
 
 public class UnicodeCypher implements Cypher {
-    private static final char FIRST_CHARACTER = ' '; // using 'empty space' the first (32)
-    private static final char LAST_CHARACTER = '~' ; // using '~' has the last (126)
+    private static final char FIRST_CHARACTER = ' '; // using 'empty space' as  the first (32)
+    private static final char LAST_CHARACTER = '~' ; // using '~' as the last (126)
 
     private final int key;
 
