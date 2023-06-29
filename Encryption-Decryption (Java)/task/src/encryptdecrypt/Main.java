@@ -107,19 +107,14 @@ public class Main {
         return  result.toString();
     }
 
-
     public static StringBuilder cypherOperation(Map<String, String> operator, String inputData) {
-
-        StringBuilder result = new StringBuilder();
-
         int inputKey = Integer.parseInt(operator.get("-key")) ;
 
-        switch (operator.get("-alg")) {
-            case "shift" -> result = shiftEncryptionDecryptionOperation(operator, inputData, inputKey);
-            case "unicode" -> result = unicodeEncryptionDecryptionOperation(operator, inputData, inputKey);
-            default ->{/*nothing will be done*/}
-        }
-        return result;
+        return switch (operator.get("-alg")) {
+            case "shift" ->  shiftEncryptionDecryptionOperation(operator, inputData, inputKey);
+            case "unicode" ->  unicodeEncryptionDecryptionOperation(operator, inputData, inputKey);
+            default -> new StringBuilder();
+        };
     }
 
     private static StringBuilder unicodeEncryptionDecryptionOperation(Map<String, String> operator, String inputData, int inputKey) {
@@ -141,7 +136,7 @@ public class Main {
     private static void assignKeyToValue(String[] args, Map<String, String> operator) {
         int i = 0;
         while (i < args.length) {
-            if (DEFAULT.containsKey(args[i]) && (i+2) < args.length) {
+            if (DEFAULT.containsKey(args[i]) && (i+2) <= args.length) {
                 if (args[i + 1].charAt(0) != '-') {
                     operator.put(args[i], args[i + 1]);
                     i += 2;
